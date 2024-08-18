@@ -1,0 +1,46 @@
+<div class="auth-wraper">
+    <div class="auth-header">
+        <div class="auth-header-child">
+            <button (click)="clickLogin()" class="auth-button">ავტორიზაცია</button>
+            <button (click)="clickRegister()" class="auth-button">რეგისტრაცია</button>
+        </div>
+    </div>
+    <form *ngIf="showloginform&&!showregform" action="" class="form-login" [formGroup]="loginForm" (ngSubmit)="login()">
+        <label for="">მომხმარებლის სახელი</label>
+        <input class="input" type="text" formControlName="username">
+        <label for="">პაროლი</label>
+        <input class="input" type="text" formControlName="password">
+        <button class="button">შესვლა</button>
+    </form>
+    <form *ngIf="!showloginform&&showregform" action="" class="form-reg" [formGroup]="registrationForm" (ngSubmit)="registration()">
+        <div class="form-main-wrapper">
+            <div class="form-wrapper">
+                <label class="label" for="">მომხმარებლის სახელი</label>
+                <input class="input" type="text" formControlName="username">
+                
+                <label class="label" for="">პაროლი</label>
+                <input class="input" type="text" formControlName="password">
+    
+                <label class="label" for="">თანამშრომლის სახელი</label>
+                <input class="input" type="text" formControlName="name">
+    
+                <label class="label" for="">თანამშრომლის გვარი</label>
+                <input class="input" type="text" formControlName="lastname">
+            </div>
+            <div class="form-wrapper">
+                <label class="label" for="">ორგანიზაციის დასახელება</label>
+                <input class="input" type="text" formControlName="company_name">
+                
+                <label class="label" for="">ორგანიზაციის მისამართი</label>
+                <input class="input" type="text" formControlName="address">
+    
+                <label class="label" for="">ელ.ფოსტა</label>
+                <input class="input" type="text" formControlName="email">
+    
+                <label class="label" for="">ტელ.ნომერი</label>
+                <input class="input" type="text" formControlName="mobile">
+            </div>
+        </div>
+        <button class="button">რეგისტრაცია</button>
+    </form>
+</div>
