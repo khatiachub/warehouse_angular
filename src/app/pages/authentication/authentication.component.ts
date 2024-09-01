@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataServiceService } from '../../core/data-service.service';
+import { Company, LoginModel, LoginResponse } from '../../shared/data-interface';
 
 @Component({
   selector: 'app-authentication',
@@ -9,10 +10,10 @@ import { DataServiceService } from '../../core/data-service.service';
   styleUrl: './authentication.component.css'
 })
 export class AuthenticationComponent {
-  constructor(private dataService:DataServiceService,private router:Router){}
+  constructor(private dataService: DataServiceService, private router: Router) { }
 
-  showloginform:boolean=true;
-  showregform:boolean=false;
+  showloginform: boolean = true;
+  showregform: boolean = false;
   loginForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl(''),
@@ -25,51 +26,50 @@ export class AuthenticationComponent {
     company_name: new FormControl(''),
     address: new FormControl(''),
     email: new FormControl(''),
-    mobile: new FormControl('')
+    mobile: new FormControl(0)
   });
 
-  login():void{
-    console.log(this.loginForm.value);
+  login(): void {
     if (this.loginForm.valid) {
-      this.dataService.login(this.loginForm.value).subscribe({
+      this.dataService.login(this.loginForm.value as LoginModel).subscribe({
         next: (response) => {
-          console.log(response); 
           localStorage.setItem('token', response.token)
-          localStorage.setItem('id', response.id);
-          this.router.navigate(response.role==='admin'?["usersmanagment"]:["productsmanagment"])
-          // this.showloginform=false;
-        },
+          localStorage.setItem('id', response.id.toString());
+          localStorage.setItem('role', response.role);
+          this.router.navigate(
+            response.role === 'admin' ? ["usersmanagment"] : ["productsmanagment"]);
+        },  
         error: (error) => {
-          console.log(error);   
+          console.log(error);
         },
       });
-    }else{
+    } else {
       this.loginForm.markAllAsTouched();
     }
   }
-  registration():void{
+  registration(): void {
     console.log(this.registrationForm.value);
     if (this.registrationForm.valid) {
-      this.dataService.registerCompany(this.registrationForm.value).subscribe({
+      this.dataService.registerCompany(this.registrationForm.value as Company).subscribe({
         next: (response) => {
-          console.log(response); 
-         
+          console.log(response);
+
         },
         error: (error) => {
-          console.log(error);   
+          console.log(error);
         },
       });
-    }else{
+    } else {
       this.loginForm.markAllAsTouched();
     }
   }
 
-  clickLogin():void{
-    this.showloginform=true;
-    this.showregform=false;
+  clickLogin(): void {
+    this.showloginform = true;
+    this.showregform = false;
   }
-  clickRegister():void{
-    this.showloginform=false;
-    this.showregform=true;
+  clickRegister(): void {
+    this.showloginform = false;
+    this.showregform = true;
   }
 }

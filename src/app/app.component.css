@@ -1,0 +1,26 @@
+.header{
+    width: 100%;
+    height: 100px;
+    background-color:#EFF5FF;
+    display: flex;
+    justify-content: center;
+}
+.header-box{
+    max-width: 1273px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.button{
+    width: 300px;
+    height: 40px;
+    background-color: #DEEBFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: none;
+    color: #2869CA;
+    font-size: 16px;
+}

@@ -1,5 +1,6 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+@import 'normalize.css';
 
 
 
@@ -8,3 +9,8 @@
 body{
     background-color: #fdfdfd;   
 }
+/* *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */

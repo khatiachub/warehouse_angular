@@ -1,10 +1,177 @@
-<div class="header">
-    <div class="header-box">
-        <div style="width: 130px;"></div>
-        <p class="title">საწყობის მართვა</p>
-        <button class="button">სისტემიდან გასვლა</button>
-    </div>
-</div>
+
 <div class="main-wrapper">
-    <button >ახალი ჩანაწერი</button>
+    <p-button (onClick)="showDialog()" label="ახალი ჩანაწერი"></p-button>
+    <p-dialog [formGroup]="registrationForm" header="მომხმარებლის დამატება" [modal]="true" [(visible)]="visible"
+        [style]="{display:'flex',flexDirection:'column',maxWidth: '1083px', width: '100%',height:'817px'}">
+        <div class="dialog-wrapper">
+            <label class="font-semibold w-6rem">სახელი</label>
+            <input pInputText class="flex-auto" autocomplete="off" formControlName="name" />
+
+            <label class="font-semibold w-6rem">გვარი</label>
+            <input pInputText class="flex-auto" autocomplete="off" formControlName="lastname" />
+
+            <label class="font-semibold w-6rem">მომხმარებლის სახელი</label>
+            <input pInputText class="flex-auto" autocomplete="off" formControlName="username" />
+
+            <label for="username" class="font-semibold w-6rem">პაროლი</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" formControlName="password" />
+
+            <label for="email" class="font-semibold w-6rem">მომხმარებლის ტიპი</label>
+            <p-dropdown class="flex-auto" [options]="roles" optionLabel="label" optionValue="value" placeholder="მომხმარებლის ტიპი"
+                formControlName="role_id"   (onChange)="onRoleChange($event)">
+            </p-dropdown>
+
+            <div class="flex-auto" *ngIf="showWarehousesList">
+                <p-dropdown 
+                  class="flex-auto"
+                  [options]="warehousesList" 
+                  optionLabel="warehouse"
+                  optionValue="id"
+                  placeholder="Warehouses"
+                  formControlName="warehouse_id"
+                ></p-dropdown>
+              </div>
+
+            <label for="email" class="font-semibold w-6rem">მობილური</label>
+            <input pInputText id="email" class="flex-auto" autocomplete="off" formControlName="mobile" />
+
+            <div class="buttons">
+                <p-button label="Save" (onClick)="registerUser()" />
+            </div>
+        </div>
+    </p-dialog>
 </div>
+
+<p-table
+    #dt
+    [value]="users"
+    [(selection)]="selectedUsers"
+    dataKey="id"
+    [rowHover]="true"
+    [rows]="10"
+    [paginator]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['id','name', 'lastname', 'username','role','mobile']"
+>
+    <ng-template pTemplate="caption">
+        <div class="flex justify-content-between">
+            <p-button [outlined]="true" icon="pi pi-filter-slash" label="Clear" (onClick)="clear(dt)" />
+            <p-iconField iconPosition="left">
+                <p-inputIcon>
+                    <i class="pi pi-search"></i>
+                </p-inputIcon>
+            </p-iconField>
+        </div>
+    </ng-template> 
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id" style="min-width: 12rem">
+                <div class="flex justify-content-between align-items-center">
+                    Id
+                    <p-sortIcon field="name"></p-sortIcon>
+                    <p-columnFilter type="text" field="id" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="name" style="min-width: 12rem">
+                <div class="flex justify-content-between align-items-center">
+                    Name
+                    <p-sortIcon field="name"></p-sortIcon>
+                    <p-columnFilter type="text" field="name" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="lastname" style="min-width: 12rem">
+                <div class="flex justify-content-between align-items-center">
+                    Lastname
+                    <p-sortIcon field="lastname"></p-sortIcon>
+                    <p-columnFilter type="text" field="lastname" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="username" style="min-width: 12rem">
+                <div class="flex justify-content-between align-items-center">
+                    Username
+                    <p-sortIcon field="username"></p-sortIcon>
+                    <p-columnFilter type="text" field="username" display="menu" class="ml-auto"></p-columnFilter>
+                </div>               
+            </th>
+            <th>
+                <div class="flex justify-content-between align-items-center">
+                    Role
+                    <p-sortIcon field="role"></p-sortIcon>
+                    <p-columnFilter type="text" field="role" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th>
+                <div class="flex justify-content-between align-items-center">
+                    Mobile
+                    <p-sortIcon field="mobile"></p-sortIcon>
+                    <p-columnFilter type="text" field="mobile" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template  pTemplate="body" let-user>
+        <tr class="p-selectable-row" (click)="editUser(user)">
+            <td>
+                <p-tableCheckbox [value]="user"></p-tableCheckbox>
+            </td>
+            <td>
+                <span class="p-column-title">Id</span>
+                {{ user.id }}
+            </td>
+            <td>
+                <span class="p-column-title">Name</span>
+                {{ user.name }}
+            </td>
+            <td>
+                <span class="p-column-title">Lastname</span>
+                {{ user.lastname }}
+            </td>
+            <td>
+                <span class="p-column-title">Username</span>
+                {{ user.username }}
+            </td>
+            <td>
+                <span class="p-column-title">Role</span>
+                {{ user.role }}
+            </td>
+            <td>
+                <span class="p-column-title">Mobile</span>
+                {{ user.mobile }}
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="4">No users found.</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog *ngIf="selectedUser" header="მომხმარებლის რედაქტირება" [modal]="true" [(visible)]="dialogOpen"
+    [style]="{display:'flex',flexDirection:'column',maxWidth: '1083px', width: '100%',height:'817px'}">
+    <div class="dialog-wrapper">
+        <label class="font-semibold w-6rem">სახელი</label>
+        <input class="flex-auto" pInputText id="name" [(ngModel)]="selectedUser.name" name="name" />
+
+        <label class="font-semibold w-6rem">გვარი</label>
+        <input class="flex-auto" pInputText id="lastname" [(ngModel)]="selectedUser.lastname" name="lastname" />
+
+        <label class="font-semibold w-6rem">მომხმარებლის სახელი</label>
+        <input class="flex-auto" pInputText id="username" [(ngModel)]="selectedUser.username" name="username" />
+
+        <label for="username" class="font-semibold w-6rem">მობილური</label>
+        <input class="flex-auto" pInputText id="mobile" [(ngModel)]="selectedUser.mobile" name="mobile" />
+        
+        <div class="buttons">
+            <p-button label="Save" (onClick)="updateUser()" />
+        </div>
+    </div>
+</p-dialog>
