@@ -7,11 +7,6 @@ import { User } from '../shared/data-interface';
 import { Warehouse } from '../shared/data-interface';
 import { LoginModel } from '../shared/data-interface';
 import { Product } from '../shared/data-interface';
-// import { GetEntryProduct } from '../shared/data-interface';
-// import { ExitProduct } from '../shared/data-interface';
-// import { GetExitProduct } from '../shared/data-interface';
-// import { UpdateEntryProduct } from '../shared/data-interface';
-// import { UpdateExitProduct } from '../shared/data-interface';
 import { CurrentAllBalance } from '../shared/data-interface';
 import { CurrentBalance } from '../shared/data-interface';
 
@@ -67,7 +62,6 @@ export class DataServiceService {
   }
   getWarehouseForUser(id: number): Observable<any> {
     return this.http.get(`${this.url}/Product/GetWarehouseForUser/${id}`);
-
   }
 
   addEntryProducts(data: Product): Observable<Product> {
@@ -88,6 +82,4 @@ export class DataServiceService {
   UpdateWarehouse(data: Warehouse, id: number): Observable<Warehouse> {
     return this.http.put<Warehouse>(`${this.url}/Product/UpdateWarehouse/${id}`, data);
   }
-
-
 }
