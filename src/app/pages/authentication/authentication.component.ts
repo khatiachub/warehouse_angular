@@ -48,7 +48,6 @@ export class AuthenticationComponent {
     }
   }
   registration(): void {
-    console.log(this.registrationForm.value);
     if (this.registrationForm.valid) {
       this.dataService.registerCompany(this.registrationForm.value as Company).subscribe({
         next: (response) => {
