@@ -1,7 +1,7 @@
-::ng-deep .p-element .dialog .ng-tns-c1946505645-0 .ng-star-inserted{
+/* ::ng-deep .p-element .dialog .ng-tns-c1946505645-0 .ng-star-inserted{
     max-width: 1273px;
     width: 100%;
-}
+} */
 ::ng-deep .flex-auto{
     max-width: 850px;
     width: 100%;
@@ -36,29 +36,42 @@ label{
     border: none;
     color: #fff;
     position: absolute;
-    top: 101px;
-    right: 20px;
+    top: 1px;
+    right: 1px;
     cursor: pointer;
+    z-index: 300;
 }
 .button:disabled {
     cursor: not-allowed;
     opacity: 0.5; 
 }
-
-
-::ng-deep .p-datatable-wrapper{
-width:100%;
+.main-wrapper{
+    max-width: 1273px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 50px;
 }
 
-::ng-deep .p-datatable-thead{
-    width:100%;
-}
 .ng-star-inserted{
     background-color: #fff;
 }
 
-
+::ng-deep .p-tabview-nav{
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+}
+::ng-deep .p-tabview-panels{
+    background-color: #fff;
+    margin-top: 20px;
+}
 ::ng-deep .p-datatable .p-datatable-header{
     background-color: #fff;
 }
-
+::ng-deep .p-tabview-nav-container{
+    width: 300px;
+}
+::ng-deep .p-element .p-sortable-column{
+    background-color: #fff;
+}

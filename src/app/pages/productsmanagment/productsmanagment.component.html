@@ -5,9 +5,8 @@
         [disabled]="role==='manager'&&activeTabIndex!==3||activeTabIndex===2" label="ახალი ჩანაწერი">ახალი
         ჩანაწერი</button>
 
-      <p-table [scrollable]="true" scrollHeight="400px" [resizableColumns]="true" #dt [value]="product"
-        [(selection)]="selectedProducts" dataKey="id" [rowHover]="true" [rows]="10" [paginator]="true"
-        [rowsPerPageOptions]="[10, 25, 50]"
+      <p-table [resizableColumns]="true" #dt [value]="product" [(selection)]="selectedProducts" dataKey="id"
+        [rowHover]="true" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10, 25, 50]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [globalFilterFields]="['barcode','product_name', 'quantity', 'entry_date','exit_date','name','lastname','warehouse_name','current_balance','id','address','warehouse']">
         <ng-template pTemplate="caption">
@@ -22,32 +21,29 @@
         </ng-template>
 
         <ng-template pTemplate="header">
-          <tr>
-
-            <th *ngIf="!product[0]?.address;" pSortableColumn="barcode"
-              [ngStyle]="{ 'min-width': activeTabIndex===2&& '25rem' }">
+          <tr *ngIf="activeTabIndex===0||activeTabIndex===1">
+            <th pSortableColumn="barcode">
               <div class="flex justify-content-between align-items-center">
                 შტრიხკოდი
                 <p-sortIcon field="barcode"></p-sortIcon>
                 <p-columnFilter type="text" field="barcode" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
-            <th *ngIf="!product[0]?.address;" pSortableColumn="product_name"
-              [ngStyle]="{ 'min-width': activeTabIndex===2&& '25rem' }">
+            <th pSortableColumn="product_name">
               <div class="flex justify-content-between align-items-center">
                 პროდუქტის სახელი
                 <p-sortIcon field="product_name"></p-sortIcon>
                 <p-columnFilter type="text" field="product_name" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
-            <th *ngIf="product[0]?.quantity!==0 && !product[0]?.address;" pSortableColumn="quantity">
+            <th pSortableColumn="quantity">
               <div class="flex justify-content-between align-items-center">
                 რაოდენობა
                 <p-sortIcon field="quantity"></p-sortIcon>
                 <p-columnFilter type="text" field="quantity" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
-            <th *ngIf="product[0]?.quantity!==0 && !product[0]?.address;" pSortableColumn="entry_date">
+            <th pSortableColumn="entry_date">
               <div class="flex justify-content-between align-items-center">
                 <ng-container *ngIf="product[0]?.entry_date; else exitDate">
                   <span>შემოსვლის თარიღი</span>
@@ -59,57 +55,85 @@
                 <p-columnFilter type="text" field="entry_date" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
-            <th *ngIf="product[0]?.quantity!==0 && !product[0]?.address;">
+            <th pSortableColumn="name">
               <div class="flex justify-content-between align-items-center">
-                ოპერატორის სახელი
+                სახელი
                 <p-sortIcon field="name"></p-sortIcon>
                 <p-columnFilter type="text" field="name" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
-            <th *ngIf="product[0]?.quantity!==0 && !product[0]?.address;">
+            <th pSortableColumn="lastname">
               <div class="flex justify-content-between align-items-center">
-                ოპერატორის გვარი
+                გვარი
                 <p-sortIcon field="lastname"></p-sortIcon>
                 <p-columnFilter type="text" field="lastname" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
-            <th *ngIf="product[0]?.quantity===0 && !product[0]?.address;"
-              [ngStyle]="{ 'min-width': activeTabIndex===2&& '25rem' }">
-              <div class="flex justify-content-between align-items-center">
-                მიმდინარე ბალანსი
-                <p-sortIcon field="current_balance"></p-sortIcon>
-                <p-columnFilter type="text" field="current_balance" display="menu" class="ml-auto"></p-columnFilter>
-              </div>
-            </th>
-            <th *ngIf="product[0]?.address;" pSortableColumn="id" style="min-width: 25rem;">
-              <div class="flex justify-content-between align-items-center">
-                საწყობის აიდი
-                <p-sortIcon field="id"></p-sortIcon>
-                <p-columnFilter type="text" field="id" display="menu" class="ml-auto"></p-columnFilter>
-              </div>
-            </th>
-            <th *ngIf="product[0]?.address;" pSortableColumn="address" style="min-width: 25rem;">
-              <div class="flex justify-content-between align-items-center">
-                საწყობის მისამართი
-                <p-sortIcon field="address"></p-sortIcon>
-                <p-columnFilter type="text" field="address" display="menu" class="ml-auto"></p-columnFilter>
-              </div>
-            </th>
-            <th pSortableColumn="warehouse_name" *ngIf="activeTabIndex!==3;">
+
+            <th pSortableColumn="warehouse_name">
               <div class="flex justify-content-between align-items-center">
                 საწყობის დასახელება
                 <p-sortIcon field="warehouse_name"></p-sortIcon>
                 <p-columnFilter type="text" field="warehouse_name" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
-            <th pSortableColumn="warehouse" *ngIf="activeTabIndex===3;">
+
+          </tr>
+
+          <tr *ngIf="activeTabIndex===2">
+            <th pSortableColumn="barcode">
+              <div class="flex justify-content-between align-items-center">
+                შტრიხკოდი
+                <p-sortIcon field="barcode"></p-sortIcon>
+                <p-columnFilter type="text" field="barcode" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
+            <th pSortableColumn="product_name">
+              <div class="flex justify-content-between align-items-center">
+                პროდუქტის სახელი
+                <p-sortIcon field="product_name"></p-sortIcon>
+                <p-columnFilter type="text" field="product_name" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
+            <th pSortableColumn="current_balance">
+              <div class="flex justify-content-between align-items-center">
+                მიმდინარე ბალანსი
+                <p-sortIcon field="current_balance"></p-sortIcon>
+                <p-columnFilter type="text" field="current_balance" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
+            <th pSortableColumn="warehouse">
               <div class="flex justify-content-between align-items-center">
                 საწყობის დასახელება
                 <p-sortIcon field="warehouse"></p-sortIcon>
                 <p-columnFilter type="text" field="warehouse" display="menu" class="ml-auto"></p-columnFilter>
               </div>
             </th>
+          </tr>
 
+
+          <tr *ngIf="activeTabIndex===3">
+            <th pSortableColumn="id">
+              <div class="flex justify-content-between align-items-center">
+                საწყობის აიდი
+                <p-sortIcon field="id"></p-sortIcon>
+                <p-columnFilter type="text" field="id" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
+            <th pSortableColumn="address">
+              <div class="flex justify-content-between align-items-center">
+                საწყობის მისამართი
+                <p-sortIcon field="address"></p-sortIcon>
+                <p-columnFilter type="text" field="address" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
+            <th pSortableColumn="warehouse">
+              <div class="flex justify-content-between align-items-center">
+                საწყობის დასახელება
+                <p-sortIcon field="warehouse"></p-sortIcon>
+                <p-columnFilter type="text" field="warehouse" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+            </th>
           </tr>
         </ng-template>
 
@@ -119,60 +143,76 @@
 
 
         <ng-template pTemplate="body" let-product>
-          <tr [pSelectableRow]="product" (click)="openEditForm(product)">
-
-            <td *ngIf="!product?.address;">
+          <tr *ngIf="(activeTabIndex===0||activeTabIndex===1)&&product.quantity!==0" [pSelectableRow]="product"
+            (click)="openEditForm(product)">
+            <td>
               <span class="p-column-title">შტრიხკოდი</span>
               {{ product.barcode }}
             </td>
 
-            <td *ngIf="!product?.address;">
+            <td>
               <span class="p-column-title">პროდუქტის სახელი</span>
               {{ product.product_name }}
             </td>
-            <td *ngIf="product?.quantity!==0&&!product?.address;">
+            <td *ngIf="product?.quantity!==0">
               <span class="p-column-title">რაოდენობა</span>
               {{ product.quantity }}
             </td>
 
-            <td *ngIf="product?.quantity!==0&&!product?.address;">
+            <td *ngIf="product?.quantity!==0">
               <span class="p-column-title">{{ product.entry_date ? 'შემოსვლის თარიღი' : 'გასვლის თარიღი' }}</span>
               {{ product.entry_date || product.exit_date }}
             </td>
-
-            <td *ngIf="product?.quantity!==0&&!product?.address;">
+            <td>
               <span class="p-column-title">ოპერატორის სახელი</span>
               {{ product.name }}
             </td>
-
-            <td *ngIf="product?.quantity!==0&&!product?.address;">
+            <td>
               <span class="p-column-title">ოპერატორის გვარი</span>
               {{ product.lastname }}
             </td>
-
-            <td *ngIf="product?.quantity===0&&!product?.address;">
-
-              <span class="p-column-title">მიმდინარე ბალანსი</span>
-              {{ product.current_balance }}
-            </td>
-            <td *ngIf="!product?.address;">
+            <td>
               <span class="p-column-title">საწყობის სახელი</span>
               {{ product?.warehouse_name }}
             </td>
+          </tr>
 
-            <td *ngIf="product?.address;">
-              <span class="p-column-title">პროდუქციის აიდი</span>
-              {{ product?.id }}
+          <tr *ngIf="activeTabIndex===2&&product.barcode!==''" [pSelectableRow]="product"
+            (click)="openEditForm(product)">
+            <td>
+              <span class="p-column-title">შტრიხკოდი</span>
+              {{ product?.barcode }}
             </td>
-            <td *ngIf="product?.address;">
+
+            <td>
+              <span class="p-column-title">პროდუქტის სახელი</span>
+              {{ product?.product_name }}
+            </td>
+            <td>
+              <span class="p-column-title">მიმდინარე ბალანსი</span>
+              {{ product?.current_balance }}
+            </td>
+            <td>
+              <span class="p-column-title">საწყობის სახელი</span>
+              {{ product?.warehouse_name }}
+            </td>
+          </tr>
+
+
+
+          <tr *ngIf="activeTabIndex===3&&product?.id!==0" [pSelectableRow]="product" (click)="openEditForm(product)">
+            <td>
+              <span class="p-column-title">პროდუქციის აიდი</span>
+              {{ product.id }}
+            </td>
+            <td>
               <span class="p-column-title">საწყობის მისამართი</span>
               {{ product?.address }}
             </td>
-            <td *ngIf="product?.address;">
+            <td>
               <span class="p-column-title">საწყობის სახელი</span>
               {{ product?.warehouse }}
             </td>
-
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -188,50 +228,95 @@
 </div>
 
 
-<p-dialog [formGroup]="customForm()" header="პროდუქტის დამატება" [modal]="true" [(visible)]="visible"
+<p-dialog [formGroup]="customForm()" [header]="headerDialog " [modal]="true" [(visible)]="visible"
   [style]="{display:'flex',flexDirection:'column',maxWidth: '1083px', width: '100%',height:'auto'}">
   <div class="dialog-wrapper">
     <div class="input-wrapper">
       <label *ngIf="activeTabIndex===0||activeTabIndex===1" class="font-semibold w-6rem">ბარკოდი</label>
-      <input *ngIf="activeTabIndex===0||activeTabIndex===1" pInputText class="flex-auto" autocomplete="off"
+      <input [ngStyle]="{
+        'border-color':
+        (activeTabIndex === 0 && addProducts.get('barcode')?.invalid && addProducts.get('barcode')?.touched) 
+        ? '#FF6D6D' 
+        : (activeTabIndex === 1 && exitProducts.get('barcode')?.invalid && exitProducts.get('barcode')?.touched)
+          ? '#FF6D6D' 
+          : '#DEEBFF'
+    }" *ngIf="activeTabIndex===0||activeTabIndex===1" pInputText class="flex-auto" autocomplete="off"
         formControlName="barcode" />
 
     </div>
     <div class="input-wrapper">
       <label *ngIf="activeTabIndex===0||activeTabIndex===1" class="font-semibold w-6rem">პროდუქტის სახელი</label>
-      <input *ngIf="activeTabIndex===0||activeTabIndex===1" pInputText class="flex-auto" autocomplete="off"
+      <input [ngStyle]="{
+        'border-color':
+        (activeTabIndex === 0 && addProducts.get('product_name')?.invalid && addProducts.get('product_name')?.touched) 
+        ? '#FF6D6D' 
+        : (activeTabIndex === 1 && exitProducts.get('product_name')?.invalid && exitProducts.get('product_name')?.touched)
+          ? '#FF6D6D' 
+          : '#DEEBFF'
+    }" *ngIf="activeTabIndex===0||activeTabIndex===1" pInputText class="flex-auto" autocomplete="off"
         formControlName="product_name" />
 
     </div>
     <div class="input-wrapper">
       <label *ngIf="activeTabIndex===0||activeTabIndex===1" class="font-semibold w-6rem">რაოდენობა</label>
-      <input *ngIf="activeTabIndex===0||activeTabIndex===1" pInputText class="flex-auto" autocomplete="off"
+      <input [ngStyle]="{
+        'border-color':
+        (activeTabIndex === 0 && addProducts.get('quantity')?.invalid && addProducts.get('quantity')?.touched) 
+        ? '#FF6D6D' 
+        : (activeTabIndex === 1 && exitProducts.get('quantity')?.invalid && exitProducts.get('quantity')?.touched)
+          ? '#FF6D6D' 
+          : '#DEEBFF'
+    }" *ngIf="activeTabIndex===0||activeTabIndex===1" pInputText class="flex-auto" autocomplete="off"
         formControlName="quantity" />
 
     </div>
     <div class="input-wrapper">
       <label *ngIf="activeTabIndex===0" for="entry_date" class="font-semibold w-6rem">შემოსვლის თარიღი</label>
-      <input type="date" *ngIf="activeTabIndex===0" pInputText id="entry_date" class="flex-auto" autocomplete="off"
+      <input [ngStyle]="{
+        'border-color':
+        addProducts.get('entry_date')?.invalid&& addProducts.get('entry_date')?.touched
+            ? '#FF6D6D !important'
+            : '#DEEBFF !important'
+      }" type="date" *ngIf="activeTabIndex===0" pInputText id="entry_date" class="flex-auto" autocomplete="off"
         formControlName="entry_date" />
 
     </div>
     <div class="input-wrapper">
       <label *ngIf="activeTabIndex===1" for="exit_date" class="font-semibold w-6rem">გასვლის თარიღი</label>
-      <input type="date" *ngIf="activeTabIndex===1" pInputText id="exit_date" class="flex-auto" autocomplete="off"
-        formControlName="exit_date" />
+      <input [ngStyle]="{
+        'border-color':
+        addProducts.get('exit_date')?.invalid&& addProducts.get('exit_date')?.touched
+            ? '#FF6D6D !important'
+            : '#DEEBFF !important'
+      }" type="date" *ngIf="activeTabIndex===1" pInputText id="exit_date" class="flex-auto" autocomplete="off"
+        formControlName="exit_date" required />
     </div>
-    <p-dropdown *ngIf="activeTabIndex===1" class="flex-auto" [options]="unit" placeholder="ერთეული"
-      formControlName="unit">
+    <p-dropdown [ngStyle]="{
+      'border-color':
+      addProducts.get('unit')?.invalid&& addProducts.get('unit')?.touched
+          ? '#FF6D6D'
+          : '#DEEBFF'
+    }" *ngIf="activeTabIndex===1" class="flex-auto" [options]="unit" placeholder="ერთეული" formControlName="unit">
     </p-dropdown>
 
     <div class="input-wrapper">
       <label *ngIf="activeTabIndex===3" for="warehouse" class="font-semibold w-6rem">საწყობის სახელი</label>
-      <input *ngIf="activeTabIndex===3" pInputText id="warehouse" class="flex-auto" autocomplete="off"
+      <input [ngStyle]="{
+        'border-color':
+        addProducts.get('warehouse')?.invalid&& addProducts.get('warehouse')?.touched
+            ? '#FF6D6D'
+            : '#DEEBFF'
+      }" *ngIf="activeTabIndex===3" pInputText id="warehouse" class="flex-auto" autocomplete="off"
         formControlName="warehouse" />
     </div>
     <div class="input-wrapper">
       <label *ngIf="activeTabIndex===3" for="warehouse_address" class="font-semibold w-6rem">საწყობის მისამართი</label>
-      <input *ngIf="activeTabIndex===3" pInputText id="warehouse_address" class="flex-auto" autocomplete="off"
+      <input [ngStyle]="{
+        'border-color':
+        addProducts.get('address')?.invalid&& addProducts.get('address')?.touched
+            ? '#FF6D6D'
+            : '#DEEBFF'
+      }" *ngIf="activeTabIndex===3" pInputText id="warehouse_address" class="flex-auto" autocomplete="off"
         formControlName="address" />
     </div>
   </div>

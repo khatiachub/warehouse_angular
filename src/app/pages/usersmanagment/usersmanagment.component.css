@@ -2,15 +2,20 @@
 .button{
     width: 300px;
     height: 40px;
-    background-color: #DEEBFF;
+    background-color: #2869CA;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
     border: none;
-    color: #2869CA;
+    color: #fff;
     font-size: 16px;
+    cursor: pointer;
+    z-index: 150;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
+
 .title{
     font-size: 16px;
     color: #2869CA;
@@ -18,14 +23,28 @@
 .dialog-wrapper{
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     justify-content: center;
     margin-top: 30px;
 }
-::ng-deep .p-element .dialog .ng-tns-c1946505645-0 .ng-star-inserted{
+
+.main-wrapper{
     max-width: 1273px;
     width: 100%;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 50px;
+    padding: 0px 20px 0px 20px;
 }
+
+::ng-deep .p-element .p-sortable-column{
+    background-color: #fff;
+}
+
+::ng-deep .p-datatable .p-datatable-header{
+    background-color: #fff;
+}
+
+
 .flex-auto{
     width: 100%;
     margin-top: 10px;
@@ -38,4 +57,11 @@ label{
     display: flex;
     justify-content: space-between;
     margin-top: 30px;
+}
+
+.border-color-normal{
+    border: 1px solid #DEEBFF;
+}
+.border-color-red{
+    border: 1px solid #FF6D6D;
 }

@@ -14,7 +14,7 @@ export interface UserRegister {
 export interface Company {
     company_name: string,
     address: string,
-    mobile: number,
+    mobile: number|null,
     password: string,
     name: string,
     lastname: string,
@@ -44,7 +44,7 @@ export interface Product extends TabInfo {
     id: number,
     barcode: string;
     product_name: string;
-    quantity: number;
+    quantity: number|null;
     entry_date: string | null;
     exit_date: string | null;
     operator_id: number;

@@ -33,8 +33,8 @@ export class DataServiceService {
   getUsers(id: number | null): Observable<User[]> {
     return this.http.get<User[]>(`${this.url}/User/GetUsers/${id}`);
   }
-  getWarehouses(): Observable<Warehouse[]> {
-    return this.http.get<Warehouse[]>(`${this.url}/Product/GetWarehouses/`);
+  getWarehouses(id:number): Observable<Warehouse[]> {
+    return this.http.get<Warehouse[]>(`${this.url}/Product/GetWarehouses/${id}`);
   }
 
   login(data: LoginModel): Observable<LoginResponse> {
@@ -44,15 +44,15 @@ export class DataServiceService {
     return this.http.put<User>(`${this.url}/User/UpdateUser/${data.id}`, data);
   }
 
-  getAllEntryProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.url}/Product/GetAllEntryProducts`);
+  getAllEntryProducts(id:number): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.url}/Product/GetAllEntryProducts/${id}`);
   }
-  getAllExitProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.url}/Product/GetAllExitProducts`);
+  getAllExitProducts(id:number): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.url}/Product/GetAllExitProducts/${id}`);
   }
 
-  getAllCurrentBalance(): Observable<CurrentAllBalance[]> {
-    return this.http.get<CurrentAllBalance[]>(`${this.url}/Product/GetAllCurrentBalance`);
+  getAllCurrentBalance(id:number): Observable<CurrentAllBalance[]> {
+    return this.http.get<CurrentAllBalance[]>(`${this.url}/Product/GetAllCurrentBalance/${id}`);
   }
 
   getEntryProducts(id: number): Observable<Product[]> {

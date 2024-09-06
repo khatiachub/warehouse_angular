@@ -1,44 +1,84 @@
 <div class="auth-wraper">
     <div class="auth-header">
         <div class="auth-header-child">
-            <button (click)="clickLogin()" class="auth-button">ავტორიზაცია</button>
-            <button (click)="clickRegister()" class="auth-button">რეგისტრაცია</button>
+            <button [ngStyle]="{'background-color':showloginform?'#fFF':'#E8F1FF'}" (click)="clickLogin()" class="auth-button">ავტორიზაცია</button>
+            <button [ngStyle]="{'background-color':showregform?'#fff':'#E8F1FF'}" (click)="clickRegister()" class="auth-button">რეგისტრაცია</button>
         </div>
     </div>
     <form *ngIf="showloginform&&!showregform" action="" class="form-login" [formGroup]="loginForm" (ngSubmit)="login()">
-        <label for="">მომხმარებლის სახელი</label>
-        <input class="input" type="text" formControlName="username">
-        <label for="">პაროლი</label>
-        <input class="input" type="text" formControlName="password">
+        <label class="label" for="">მომხმარებლის სახელი <span class="required-label">*</span></label>
+        <input [ngStyle]="{
+            'border-color':
+            loginForm.get('username')?.invalid && loginForm.get('username')?.touched
+                ? '#FF6D6D'
+                : '#DEEBFF'
+          }" class="input" type="text" formControlName="username" pInputText>
+        <label class="label"  for="">პაროლი <span class="required-label">*</span></label>
+        <input [ngStyle]="{
+            'border-color':
+            loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+                ? '#FF6D6D'
+                : '#DEEBFF'
+          }" class="input" type="password" formControlName="password" pInputText>
         <button class="button">შესვლა</button>
     </form>
     <form *ngIf="!showloginform&&showregform" action="" class="form-reg" [formGroup]="registrationForm" (ngSubmit)="registration()">
         <div class="form-main-wrapper">
             <div class="form-wrapper">
-                <label class="label" for="">მომხმარებლის სახელი</label>
-                <input class="input" type="text" formControlName="username">
+                <label class="label" for="">მომხმარებლის სახელი <span class="required-label">*</span></label>
+                <input [ngStyle]="{
+                    'border-color':
+                    registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched
+                        ? '#FF6D6D'
+                        : '#DEEBFF'
+                  }" class="input" type="text" formControlName="username" pInputText >
                 
-                <label class="label" for="">პაროლი</label>
-                <input class="input" type="text" formControlName="password">
+                <label class="label" for="">პაროლი <span class="required-label">*</span></label>
+                <input [ngStyle]="{
+                    'border-color':
+                    registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched
+                        ? '#FF6D6D'
+                        : '#DEEBFF'
+                  }" class="input" type="password" formControlName="password" pInputText >
     
-                <label class="label" for="">თანამშრომლის სახელი</label>
-                <input class="input" type="text" formControlName="name">
+                <label class="label" for="">თანამშრომლის სახელი <span class="required-label">*</span></label>
+                <input [ngStyle]="{
+                    'border-color':
+                    registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched
+                        ? '#FF6D6D'
+                        : '#DEEBFF'
+                  }" class="input" type="text" formControlName="name" pInputText >
     
-                <label class="label" for="">თანამშრომლის გვარი</label>
-                <input class="input" type="text" formControlName="lastname">
+                <label class="label" for="">თანამშრომლის გვარი <span class="required-label">*</span></label>
+                <input [ngStyle]="{
+                    'border-color':
+                    registrationForm.get('lastname')?.invalid && registrationForm.get('lastname')?.touched
+                        ? '#FF6D6D'
+                        : '#DEEBFF'
+                  }" class="input" type="text" formControlName="lastname" pInputText >
             </div>
             <div class="form-wrapper">
-                <label class="label" for="">ორგანიზაციის დასახელება</label>
-                <input class="input" type="text" formControlName="company_name">
+                <label class="label" for="">ორგანიზაციის დასახელება <span class="required-label">*</span></label>
+                <input [ngStyle]="{
+                    'border-color':
+                    registrationForm.get('company_name')?.invalid && registrationForm.get('company_name')?.touched
+                        ? '#FF6D6D'
+                        : '#DEEBFF'
+                  }" class="input" type="text" formControlName="company_name">
                 
-                <label class="label" for="">ორგანიზაციის მისამართი</label>
-                <input class="input" type="text" formControlName="address">
+                <label class="label" for="">ორგანიზაციის მისამართი <span class="required-label">*</span></label>
+                <input [ngStyle]="{
+                    'border-color':
+                    registrationForm.get('address')?.invalid && registrationForm.get('address')?.touched
+                        ? '#FF6D6D'
+                        : '#DEEBFF'
+                  }" class="input" type="text" formControlName="address" pInputText>
     
-                <label class="label" for="">ელ.ფოსტა</label>
-                <input class="input" type="text" formControlName="email">
+                <label class="label" for="">ელ.ფოსტა </label>
+                <input class="input" type="text" formControlName="email" pInputText >
     
-                <label class="label" for="">ტელ.ნომერი</label>
-                <input class="input" type="text" formControlName="mobile">
+                <label class="label" for="tel">ტელ.ნომერი</label>
+                <input class="input" id="tel" type="text" formControlName="mobile" pInputText >
             </div>
         </div>
         <button class="button">რეგისტრაცია</button>

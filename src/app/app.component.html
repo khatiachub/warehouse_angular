@@ -1,8 +1,11 @@
-<div class="header">
-  <div class="header-box">
+<div *ngIf="!authenticationpage" class="header">
+  <div  class="header-box">
       <div style="width: 130px;"></div>
       <p class="title">საწყობის მართვა</p>
-      <button (click)="logOut()" class="button">სისტემიდან გასვლა</button>
+      <div (click)="logOut()" class="button">
+        <p>სისტემიდან გასვლა</p>
+        <i style="margin-left: 10px;" class="fa-solid fa-arrow-right-from-bracket"></i>
+      </div>
   </div>
 </div>
 <div>

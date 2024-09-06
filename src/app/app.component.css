@@ -17,10 +17,16 @@
     height: 40px;
     background-color: #DEEBFF;
     display: flex;
-    justify-content: center;
+    justify-content:center;
     align-items: center;
     border-radius: 10px;
     border: none;
     color: #2869CA;
     font-size: 16px;
+    font-weight: bold;
+}
+.title{
+    color: #2869CA;
+    font-size: 16px;
+    font-weight: bold;
 }

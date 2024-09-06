@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataServiceService } from '../../core/data-service.service';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import dayjs from 'dayjs';
 import { CurrentAllBalance, CurrentBalance, Product } from '../../shared/data-interface';
@@ -19,7 +19,7 @@ export class ProductsmanagmentComponent implements OnInit {
   role = localStorage.getItem('role');
   visible: boolean = false;
   warehouseName = '';
-  companyId = null;
+  companyId = 0;
 
   unit: string[] = [
     'ცალი', 'კგ', 'ლიტრი'
@@ -32,28 +32,28 @@ export class ProductsmanagmentComponent implements OnInit {
   constructor(private dataService: DataServiceService, private router: Router, private datePipe: DatePipe) {
   }
   addProducts = new FormGroup({
-    barcode: new FormControl(''),
-    product_name: new FormControl(''),
-    quantity: new FormControl(0),
-    entry_date: new FormControl(''),
+    barcode: new FormControl('', [Validators.required]),
+    product_name: new FormControl('', [Validators.required]),
+    quantity: new FormControl<null | number>(null, [Validators.required]),
+    entry_date: new FormControl('', [Validators.required]),
     operator_id: new FormControl(Number(localStorage.getItem("id"))),
     warehouse_name: new FormControl('')
   });
 
 
   exitProducts = new FormGroup({
-    barcode: new FormControl(''),
-    product_name: new FormControl(''),
-    quantity: new FormControl(0),
-    exit_date: new FormControl(''),
+    barcode: new FormControl('', [Validators.required]),
+    product_name: new FormControl('', [Validators.required]),
+    quantity: new FormControl<number | null>(null, [Validators.required]),
+    exit_date: new FormControl('', [Validators.required]),
     operator_id: new FormControl(Number(localStorage.getItem("id"))),
     warehouse_name: new FormControl(''),
-    unit: new FormControl('')
+    unit: new FormControl('', [Validators.required])
   });
   addWarehouse = new FormGroup({
-    warehouse: new FormControl(''),
-    company_id: new FormControl(null),
-    address: new FormControl('')
+    warehouse: new FormControl('', [Validators.required]),
+    company_id: new FormControl(0),
+    address: new FormControl('', [Validators.required])
   });
   customForm(): FormGroup {
     if (this.activeTabIndex === 0) {
@@ -66,118 +66,128 @@ export class ProductsmanagmentComponent implements OnInit {
   }
   submitForm(): void {
     if (this.activeTabIndex === 0) {
-      this.addProducts.value.warehouse_name = this.warehouseName;
-      const date = this.addProducts.value.entry_date;
-      const formattedDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
-      this.addProducts.value.entry_date = formattedDate
-
-      this.dataService.addEntryProducts(this.addProducts.value as Product).subscribe({
-        next: (response) => {
-          this.visible = false;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      if (this.addProducts.valid) {
+        if (this.addProducts.value.quantity?.toString() !== "0") {
+          this.addProducts.value.warehouse_name = this.warehouseName;
+          const date = this.addProducts.value.entry_date;
+          const formattedDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
+          this.addProducts.value.entry_date = formattedDate
+          this.dataService.addEntryProducts(this.addProducts.value as Product).subscribe({
+            next: (response) => {
+              window.location.reload();
+              this.visible = false;
+            },
+            error: (error) => {
+              console.log(error);
+              if (error.status === 20001) {
+                alert('ჩაწერეთ განსხვავებული ბარკოდი')
+              }
+            },
+          });
+        } else {
+          alert("რაოდენობა არ შეიძლება იყოს 0")
+          return
+        }
+      } else {
+        this.addProducts.markAllAsTouched();
+      }
     } else if (this.activeTabIndex === 1) {
-      this.exitProducts.value.warehouse_name = this.warehouseName;
-      const date = this.exitProducts.value.exit_date;
-      const formattedDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
-      this.exitProducts.value.exit_date = formattedDate;
+      if (this.exitProducts.valid) {
+        if (this.exitProducts.value.quantity?.toString() !== "0") {
+          this.exitProducts.value.warehouse_name = this.warehouseName;
+          const date = this.exitProducts.value.exit_date;
+          const formattedDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
+          this.exitProducts.value.exit_date = formattedDate;
 
-      this.dataService.addExitProducts(this.exitProducts.value as Product).subscribe({
-        next: (response) => {
-          this.visible = false;
-        },
-        error: (error) => {
-          console.log(error);
-          if (error.status === 20001) {
-            alert('საწყობში არ არის საკმარისი რაოდენობის პროდუცქია')
-          }
-        },
-      });
+          this.dataService.addExitProducts(this.exitProducts.value as Product).subscribe({
+            next: (response) => {
+              window.location.reload();
+              this.visible = false;
+            },
+            error: (error) => {
+              console.log(error);
+              if (error.status === 20001) {
+                alert('საწყობში არ არის საკმარისი რაოდენობის პროდუცქია')
+              }
+            },
+          });
+        } else {
+          alert("რაოდენობა არ შეიძლება იყოს 0")
+          return
+        }
+      } else {
+        this.exitProducts.markAllAsTouched();
+      }
     } else {
-      this.addWarehouse.value.company_id = this.companyId;
-      console.log(this.addWarehouse.value);
-
-      this.dataService.addWarehouse(this.addWarehouse.value as Warehouse).subscribe({
-        next: (response) => {
-          this.visible = false;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      if (this.addWarehouse.valid) {
+        this.addWarehouse.value.company_id = this.companyId;
+        this.dataService.addWarehouse(this.addWarehouse.value as Warehouse).subscribe({
+          next: (response) => {
+            window.location.reload();
+            this.visible = false;
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+      } else {
+        this.addWarehouse.markAllAsTouched();
+      }
     }
   }
 
   OpenDialog(): void {
     this.visible = true;
-    console.log(this.visible);
-
   }
   products: any[] = [];
-  ///////////////
   selectedProducts = {};
   clear(table: Table) {
     table.clear();
   }
   getTabHeader(productGroup: any): string {
     const tabInfo = productGroup[productGroup.length - 1];
-    return tabInfo.tab || 'Default Tab';
+    return tabInfo.tab;
   }
 
   activeTabIndex: number = 0;
+  headerDialog: string = '';
 
   onTabChange(event: TabViewChangeEvent) {
     this.activeTabIndex = event.index;
+    if (this.activeTabIndex === 0) {
+      this.headerDialog = 'პროდუქტის დამატება'; 
+    } else {
+      this.headerDialog = 'პროდუქტის გატანა';  
+    }
   }
 
   ngOnInit(): void {
+    if (this.activeTabIndex === 0) {
+      this.headerDialog = 'პროდუქტის დამატება'; 
+    } else {
+      this.headerDialog = 'პროდუქტის გატანა';  
+    }
     const managerId = Number(localStorage.getItem("id"));
 
     this.dataService.getWarehouseForUser(managerId).subscribe({
       next: (response) => {
-        console.log(response);
         this.warehouseName = response?.warehouse;
-        this.companyId = response.company_id
         localStorage.setItem('warehouse_id', response?.warehouse_id);
-
-        if (this.role === 'operator') {
-          const id = Number(localStorage.getItem("id"));
-          const warehouse_id = Number(localStorage.getItem("warehouse_id"));
-          this.dataService.getEntryProducts(warehouse_id).subscribe({
-            next: (response) => {
-              response.push({
-                tab: 'tab 1',
-                barcode: '',
-                product_name: '',
-                quantity: 0,
-                warehouse_name: '',
-                entry_date: '',
-                exit_date: '',
-                operator_id: 0,
-                id: 0,
-                name: '',
-                lastname: ''
-              });
-              this.products.push(response);
-              this.getExitProducts(id);
-            },
-            error: (error) => {
-              console.log(error);
-            },
-          });
-        }
+        this.companyId = Number(localStorage.getItem("company_id")) || response.company_id;
+        localStorage.setItem('company_id', response?.company_id);
+        this.getEntry();
+        this.getAllEntry();
       },
       error: (error) => {
         console.log(error);
       },
     });
+  }
 
-
-    if (this.role === 'manager') {
-      this.dataService.getAllEntryProducts().subscribe({
+  getEntry() {
+    if (this.role === 'operator') {
+      const warehouse_id = Number(localStorage.getItem("warehouse_id"));
+      this.dataService.getEntryProducts(warehouse_id).subscribe({
         next: (response) => {
           response.push({
             tab: 'tab 1',
@@ -192,6 +202,35 @@ export class ProductsmanagmentComponent implements OnInit {
             name: '',
             lastname: ''
           });
+
+          this.products.push(response);
+          this.getExitProducts();
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+    }
+  }
+
+  getAllEntry() {
+    if (this.role === 'manager') {
+      this.dataService.getAllEntryProducts(this.companyId).subscribe({
+        next: (response) => {
+          response.push({
+            tab: 'tab 1',
+            barcode: '',
+            product_name: '',
+            quantity: 0,
+            warehouse_name: '',
+            entry_date: '',
+            exit_date: '',
+            operator_id: 0,
+            id: 0,
+            name: '',
+            lastname: ''
+          });
+
           this.products.push(response);
           this.getAllExitProducts();
         },
@@ -200,11 +239,9 @@ export class ProductsmanagmentComponent implements OnInit {
         },
       });
     }
-
   }
-
   getAllExitProducts() {
-    this.dataService.getAllExitProducts().subscribe({
+    this.dataService.getAllExitProducts(this.companyId).subscribe({
       next: (response: Product[]) => {
         response.push({
           tab: 'tab 2',
@@ -219,6 +256,8 @@ export class ProductsmanagmentComponent implements OnInit {
           name: '',
           lastname: ''
         });
+
+
         this.products.push(response);
         this.getAllCurrentBalance();
       },
@@ -229,7 +268,7 @@ export class ProductsmanagmentComponent implements OnInit {
   }
 
   getAllCurrentBalance() {
-    this.dataService.getAllCurrentBalance().subscribe({
+    this.dataService.getAllCurrentBalance(this.companyId).subscribe({
       next: (response) => {
         response.push({
           tab: 'tab 3',
@@ -248,7 +287,7 @@ export class ProductsmanagmentComponent implements OnInit {
   }
 
   getWarehouses() {
-    this.dataService.getWarehouses().subscribe({
+    this.dataService.getWarehouses(this.companyId).subscribe({
       next: (response) => {
         response.push({
           tab: 'tab 4',
@@ -264,7 +303,8 @@ export class ProductsmanagmentComponent implements OnInit {
     });
   }
 
-  getExitProducts(id: number) {
+
+  getExitProducts() {
     const warehouse_id = Number(localStorage.getItem("warehouse_id"));
     this.dataService.getExitProducts(warehouse_id).subscribe({
       next: (response) => {
@@ -281,8 +321,10 @@ export class ProductsmanagmentComponent implements OnInit {
           name: '',
           lastname: ''
         });
+
+
         this.products.push(response);
-        this.getCurrentBalance(id);
+        this.getCurrentBalance(warehouse_id);
       },
       error: (error) => {
         console.log(error);
@@ -314,16 +356,16 @@ export class ProductsmanagmentComponent implements OnInit {
   }
 
 
-
-
   openEditForm(product: any): void {
-    console.log(product);
-    const dateentry = dayjs(product.entry_date, 'DD-MMM-YYYY');
-    const formattedentryDate = dateentry.format('YYYY-MM-DD');
-    product.entry_date = formattedentryDate;
-    const dateexit = dayjs(product.exit_date, 'DD-MMM-YYYY');
-    const formattedexitDate = dateexit.format('YYYY-MM-DD');
-    product.exit_date = formattedexitDate;
+    if (this.activeTabIndex === 0) {
+      const dateentry = dayjs(product.entry_date, 'DD-MMM-YYYY');
+      const formattedentryDate = dateentry.format('YYYY-MM-DD');
+      product.entry_date = formattedentryDate;
+    } else {
+      const dateexit = dayjs(product.exit_date, 'DD-MMM-YYYY');
+      const formattedexitDate = dateexit.format('YYYY-MM-DD');
+      product.exit_date = formattedexitDate;
+    }
 
 
     if (this.role === 'manager' && this.activeTabIndex === 3 || this.role === 'operator' && this.activeTabIndex !== 2) {
@@ -404,7 +446,7 @@ export class ProductsmanagmentComponent implements OnInit {
       this.editExit.product_name = value;
     }
   }
-  getQuantity(): number {
+  getQuantity(): number | null {
     return this.activeTabIndex === 0 ? this.editEntry.quantity : this.editExit.quantity;
   }
 

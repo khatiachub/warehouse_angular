@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataServiceService } from '../../core/data-service.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User, UserRegister, Warehouse } from '../../shared/data-interface';
 import { Router } from '@angular/router';
 import { DropdownChangeEvent } from 'primeng/dropdown';
@@ -15,7 +15,6 @@ import { Table } from 'primeng/table';
 export class UsersmanagmentComponent implements OnInit {
   constructor(private dataService:DataServiceService,private router:Router){}
   visible:boolean=false;
-  Id:number|null=null;
   dialogOpen=false;
   selectedUser={} as User;
   roleName='';
@@ -28,44 +27,66 @@ export class UsersmanagmentComponent implements OnInit {
   selectedUsers: User[] = [];
   loading: boolean = false;
   searchValue: string = '';
+  showWarehousesList = false;
+  Id:number= Number(localStorage.getItem("id"));    
 
     clear(table: Table) {
         table.clear();
         this.searchValue = '';
     }
   registrationForm = new FormGroup({
-    name: new FormControl(''),
-    lastname: new FormControl(''),
-    username: new FormControl(''),
-    password: new FormControl(''),
-    role_id: new FormControl(null),
+    name: new FormControl('',[Validators.required]),
+    lastname: new FormControl('',[Validators.required]),
+    username: new FormControl('',[Validators.required]),
+    password: new FormControl('',[Validators.required]),
+    role_id: new FormControl<null|number>(null,[Validators.required]),
     mobile: new FormControl<number|null>(null),
     company_id:new FormControl(Number(localStorage.getItem("id"))),
     warehouse_id:new FormControl(null)
   });
   
-  showWarehousesList = false;
 
 onRoleChange(event: DropdownChangeEvent): void {
   const selectedRole = event.value;
   this.showWarehousesList = selectedRole === 3;
 }
 
- 
-  ngOnInit(): void {
-    this.Id= Number(localStorage.getItem("id"));    
-    this.dataService.getUsers(this.Id).subscribe({
+registerUser():void{
+  if (this.registrationForm.valid) {
+    if(this.registrationForm.value.role_id===3&&this.registrationForm.value.warehouse_id===null){
+      alert('გთხოვთ აირჩიოთ საწყობი');      
+      return
+    }else{
+      this.dataService.registerUser(this.registrationForm.value as UserRegister).subscribe({
+        next: (response) => {
+          this.getUsers();
+          this.visible=false;
+        },
+        error: (error) => {
+          console.log(error);   
+        },
+      });
+    }
+  }else{
+    this.registrationForm.markAllAsTouched();
+  }
+}
+
+
+getUsers(){
+  this.dataService.getUsers(this.Id).subscribe({
+    next: (response) => {
+      this.users=response;
+    },
+    error: (error) => {
+      console.log(error);   
+    },
+  });
+}
+  ngOnInit(): void {    
+    this.getUsers();
+    this.dataService.getWarehouses(this.Id).subscribe({
       next: (response) => {
-        console.log(response); 
-        this.users=response;
-      },
-      error: (error) => {
-        console.log(error);   
-      },
-    });
-    this.dataService.getWarehouses().subscribe({
-      next: (response) => {
-        console.log(response); 
         this.warehousesList=response
       },
       error: (error) => {
@@ -75,26 +96,10 @@ onRoleChange(event: DropdownChangeEvent): void {
   }
   
   showDialog():void{
-    this.visible=true;
+    this.visible=true;    
   }
 
-  registerUser():void{
-    this.visible=false;
-    console.log(this.registrationForm.value);
-    
-    if (this.registrationForm.valid) {
-      this.dataService.registerUser(this.registrationForm.value as UserRegister).subscribe({
-        next: (response) => {
-          console.log(response); 
-        },
-        error: (error) => {
-          console.log(error);   
-        },
-      });
-    }else{
-      this.registrationForm.markAllAsTouched();
-    }
-  }
+
 
   editUser(data:User):void{
     this.dialogOpen=true;
@@ -114,10 +119,9 @@ onRoleChange(event: DropdownChangeEvent): void {
       mobile:this.selectedUser.mobile,
       role_id:this.selectedUser.role_id
     }
-    console.log(data);
     this.dataService.UpdateUser(data).subscribe({
       next: (response) => {
-        console.log(response); 
+        this.dialogOpen=false; 
       },
       error: (error) => {
         console.log(error);   
