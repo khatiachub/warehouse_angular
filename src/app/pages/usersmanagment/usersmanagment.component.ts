@@ -19,8 +19,8 @@ export class UsersmanagmentComponent implements OnInit {
   selectedUser={} as User;
   roleName='';
   roles = [
-    { label: 'Manager', value: 2 },
-    { label: 'Operator', value: 3 }
+    { label: 'მენეჯერი', value: 2 },
+    { label: 'ოპერატორი', value: 3 }
   ];
   warehousesList:Warehouse[] = [];
   users:User[]=[];
@@ -76,7 +76,7 @@ registerUser():void{
 getUsers(){
   this.dataService.getUsers(this.Id).subscribe({
     next: (response) => {
-      this.users=response;
+      this.users=response;      
     },
     error: (error) => {
       console.log(error);   

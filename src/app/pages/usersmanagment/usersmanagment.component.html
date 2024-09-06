@@ -33,7 +33,7 @@
                 registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched
                     ? '#FF6D6D'
                     : '#DEEBFF'
-              }" pInputText class="flex-auto" autocomplete="off" formControlName="password" />
+              }" pInputText class="flex-auto" autocomplete="off" formControlName="password" type="password"/>
 
             <label for="email" class="font-semibold w-6rem">მომხმარებლის ტიპი</label>
             <p-dropdown [ngStyle]="{
@@ -47,7 +47,7 @@
 
             <div class="flex-auto" *ngIf="showWarehousesList">
                 <p-dropdown class="flex-auto" [options]="warehousesList" optionLabel="warehouse" optionValue="id"
-                    placeholder="Warehouses" formControlName="warehouse_id" [ngStyle]="{
+                    placeholder="საწყობების სია" formControlName="warehouse_id" [ngStyle]="{
                     'border-color':
                     registrationForm.get('warehouse_id')?.invalid && registrationForm.get('warehouse_id')?.touched
                         ? '#FF6D6D'
@@ -147,7 +147,7 @@
                 </td>
                 <td>
                     <span class="p-column-title">Role</span>
-                    {{ user.role }}
+                    {{ user.role==='manager'?'მენეჯერი':'ოპერატორი' }}
                 </td>
                 <td>
                     <span class="p-column-title">Mobile</span>
