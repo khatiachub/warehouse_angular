@@ -41,6 +41,9 @@ export class AuthenticationComponent {
         },  
         error: (error) => {
           console.log(error);
+         if(error.error==="Failed to login."){
+          alert('მომხმარებელი ან პაროლი არასწორია')
+         }
         },
       });
     } else {
