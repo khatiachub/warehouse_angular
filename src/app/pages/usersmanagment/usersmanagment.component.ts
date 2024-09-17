@@ -64,6 +64,9 @@ registerUser():void{
         },
         error: (error) => {
           console.log(error);   
+          if (error.status === 20001) {
+            alert('მომხმარებელი უკვე არსებობს')
+          }
         },
       });
     }

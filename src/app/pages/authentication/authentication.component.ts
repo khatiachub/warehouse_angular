@@ -51,11 +51,15 @@ export class AuthenticationComponent {
     if (this.registrationForm.valid) {
       this.dataService.registerCompany(this.registrationForm.value as Company).subscribe({
         next: (response) => {
+          this.registrationForm.reset();
           this.showregform=false;
           this.showloginform=true;
         },
         error: (error) => {
           console.log(error);
+          if (error.status === 20001) {
+            alert('მომხმარებელი უკვე არსებობს')
+          }
         },
       });
     } else {
